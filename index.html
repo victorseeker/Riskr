@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riskr | Official Solana PVP Cyber Arena</title>
+  <meta name="description" content="Decentralized Solana PVP Duels & Deflationary Gaming. Battle in 1v1 Solana Coin Flip and RPS Combat with instant on-chain payouts and $SKR burning." />
+  <link rel="icon" type="image/jpeg" href="assets/cyber_avatar.jpg" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              bg: '#07070C',
+              surface: '#0E0E18',
+              card: 'rgba(18, 18, 30, 0.75)',
+              border: 'rgba(255, 255, 255, 0.1)',
+              purple: '#BD00FF',
+              cyan: '#00F0FF',
+              green: '#00FFA3',
+              red: '#FF0055',
+              gold: '#FFD700',
+            }
+          },
+          fontFamily: {
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Neon & Cyberpunk Aesthetics */
+    body {
+      background-color: #07070C;
+      color: #FFFFFF;
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .cyber-grid {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+
+    .neon-glow-cyan {
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
+    }
+    .neon-glow-purple {
+      box-shadow: 0 0 30px rgba(189, 0, 255, 0.25);
+    }
+    .text-glow-cyan {
+      text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+    }
+    .text-glow-purple {
+      text-shadow: 0 0 12px rgba(189, 0, 255, 0.6);
+    }
+
+    /* Phone Mockup Frame - Ultra-Slim Cyber Bezel */
+    .phone-mockup {
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        0 0 40px rgba(0, 240, 255, 0.25),
+        0 25px 50px -12px rgba(0, 0, 0, 0.95);
+      border-radius: 36px;
+      background: linear-gradient(145deg, #2D2D42, #141422);
+      position: relative;
+    }
+    .phone-screen {
+      aspect-ratio: 1200 / 2574;
+      width: 100%;
+    }
+
+    /* Gradient Text Animation */
+    .gradient-text-cyber {
+      background: linear-gradient(135deg, #00F0FF 0%, #BD00FF 50%, #00FFA3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Toast Notification */
+    #copy-toast {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+  </style>
+</head>
+<body class="cyber-grid relative antialiased selection:bg-cyber-purple selection:text-white">
+
+  <!-- Glow Orbs in Background -->
+  <div class="fixed top-[-100px] left-1/4 w-[500px] h-[500px] bg-cyber-purple/15 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+  <div class="fixed bottom-[-100px] right-1/4 w-[500px] h-[500px] bg-cyber-cyan/15 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+
+  <!-- ======================================================== -->
+  <!-- 1. NAVIGATION BAR -->
+  <!-- ======================================================== -->
+  <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#07070C]/80 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="relative w-11 h-11 rounded-xl overflow-hidden border-2 border-cyber-cyan/60 group-hover:border-cyber-purple transition-all shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+          <img src="assets/cyber_avatar.jpg" alt="Riskr Logo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl font-black tracking-widest gradient-text-cyber">RISKR</span>
+            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/40">
+              v7.0
+            </span>
+          </div>
+          <span class="text-[10px] font-mono text-zinc-400 tracking-wider">SOLANA CYBER ARENA</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-bold text-zinc-300">
+        <a href="#features" class="hover:text-cyber-cyan transition-colors">Features</a>
+        <a href="#modes" class="hover:text-cyber-cyan transition-colors">Game Modes</a>
+        <a href="#showcase" class="hover:text-cyber-cyan transition-colors">App Preview</a>
+        <a href="#download" class="hover:text-cyber-cyan transition-colors">Download</a>
+        <a href="#faq" class="hover:text-cyber-cyan transition-colors">FAQ</a>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <a href="#download" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyber-cyan to-cyber-green text-black font-black text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(0,255,163,0.35)] hover:brightness-110 transition-all hover:scale-105 active:scale-95">
+          <i data-lucide="download" class="w-3.5 h-3.5 stroke-[2.5]"></i>
+          <span>Get APK v7.0</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ======================================================== -->
+  <!-- 2. HERO SECTION -->
+  <!-- ======================================================== -->
+  <section class="relative pt-12 pb-24 md:pt-20 md:pb-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      
+      <!-- Top Pills -->
+      <div class="inline-flex flex-wrap items-center justify-center gap-2 mb-8">
+        <div class="px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-xs font-mono font-bold text-cyber-cyan flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyber-green animate-pulse"></span>
+          SOLANA MAINNET READY
+        </div>
+        <div class="px-3.5 py-1.5 rounded-full bg-cyber-purple/20 border border-cyber-purple/40 text-xs font-mono font-bold text-cyber-purple flex items-center gap-1.5">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+          OFFICIAL SIGNED RELEASE v7.0
+        </div>
+        <div class="px-3.5 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-xs font-mono font-bold text-red-400">
+          18+ ONLY
+        </div>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none mb-6">
+        DECENTRALIZED SOLANA <br class="hidden sm:inline" />
+        <span class="gradient-text-cyber text-glow-cyan">PVP CYBER DUELS</span>
+      </h1>
+
+      <p class="max-w-2xl mx-auto text-base sm:text-lg text-zinc-400 leading-relaxed mb-10">
+        Challenge global players 1v1 in Solana Coin Flip and RPS Combat. Instant non-custodial smart escrow, multi-node RPC failover, and a relentless $SKR token burn incinerator.
+      </p>
+
+      <!-- CTA Buttons Group -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+        <a href="#download" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-cyber-cyan to-cyber-green text-black font-black text-sm uppercase tracking-widest shadow-[0_0_25px_rgba(0,255,163,0.4)] hover:brightness-110 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-3">
+          <i data-lucide="smartphone" class="w-5 h-5"></i>
+          <span>GET ANDROID APK v7.0</span>
+        </a>
+
+        <a href="https://github.com/victorseeker/Riskr" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/20 text-white font-bold text-sm tracking-wider transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 backdrop-blur-md">
+          <i data-lucide="github" class="w-5 h-5"></i>
+          <span>GITHUB REPOSITORY</span>
+        </a>
+      </div>
+
+      <!-- Protocol Stats Ticker -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <div class="p-4 rounded-2xl bg-[#0E0E18]/80 border border-white/10 backdrop-blur-md">
+          <span class="text-xs text-zinc-400 font-bold uppercase block mb-1">Win Payout</span>
+          <span class="text-2xl font-black text-cyber-green font-mono">1.8x (+80%)</span>
+          <span class="text-[10px] text-zinc-500 block mt-0.5">10% Protocol Fee</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-[#0E0E18]/80 border border-white/10 backdrop-blur-md">
+          <span class="text-xs text-zinc-400 font-bold uppercase block mb-1">Draw Refund</span>
+          <span class="text-2xl font-black text-cyber-cyan font-mono">100% REFUND</span>
+          <span class="text-[10px] text-zinc-500 block mt-0.5">Zero Fees on Ties</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-[#0E0E18]/80 border border-white/10 backdrop-blur-md">
+          <span class="text-xs text-zinc-400 font-bold uppercase block mb-1">Staking Tiers</span>
+          <span class="text-2xl font-black text-cyber-purple font-mono">100 - 1K</span>
+          <span class="text-[10px] text-zinc-500 block mt-0.5">$SKR Fixed Stakes</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-[#0E0E18]/80 border border-white/10 backdrop-blur-md">
+          <span class="text-xs text-zinc-400 font-bold uppercase block mb-1">Architecture</span>
+          <span class="text-2xl font-black text-yellow-400 font-mono">NON-CUSTODIAL</span>
+          <span class="text-[10px] text-zinc-500 block mt-0.5">Player Holds Private Keys</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 3. INTERACTIVE APP SHOWCASE / PHONE MOCKUP -->
+  <!-- ======================================================== -->
+  <section id="showcase" class="py-24 border-t border-b border-white/10 bg-[#0A0A12]/60 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-xs font-mono font-bold text-cyber-cyan uppercase tracking-widest block mb-2">
+          IN-APP EXPERIENCE
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+          LOOKS SICK. <span class="gradient-text-cyber">PLAYS FASTER.</span>
+        </h2>
+        <p class="text-zinc-400 text-sm sm:text-base">
+          Click the interactive tabs below to preview actual screenshots from the official v7.0 Android release.
+        </p>
+      </div>
+
+      <!-- Interactive Screen Switcher Tabs -->
+      <div class="flex flex-wrap justify-center gap-2 mb-12">
+        <button onclick="switchScreen('index')" id="tab-index" class="screen-tab px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all bg-cyber-purple text-white shadow-[0_0_15px_rgba(189,0,255,0.4)]">
+          ⚔️ Arena Lobby
+        </button>
+        <button onclick="switchScreen('flip')" id="tab-flip" class="screen-tab px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all bg-white/5 text-zinc-400 hover:text-white border border-white/10">
+          🪙 Coin Flip
+        </button>
+        <button onclick="switchScreen('rps')" id="tab-rps" class="screen-tab px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all bg-white/5 text-zinc-400 hover:text-white border border-white/10">
+          ✊ RPS Combat
+        </button>
+        <button onclick="switchScreen('burn')" id="tab-burn" class="screen-tab px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all bg-white/5 text-zinc-400 hover:text-white border border-white/10">
+          🔥 Incinerator
+        </button>
+        <button onclick="switchScreen('rank')" id="tab-rank" class="screen-tab px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all bg-white/5 text-zinc-400 hover:text-white border border-white/10">
+          🏆 Leaderboard
+        </button>
+        <button onclick="switchScreen('me')" id="tab-me" class="screen-tab px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all bg-white/5 text-zinc-400 hover:text-white border border-white/10">
+          👤 Cyber Profile
+        </button>
+      </div>
+
+      <!-- Phone Frame & Showcase Display -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left: Phone Mockup Frame -->
+        <div class="lg:col-span-6 flex items-center justify-center">
+          <div class="phone-mockup w-full max-w-[320px] sm:max-w-[340px] p-2 transition-transform duration-500 hover:scale-[1.01]">
+            <div class="phone-screen w-full rounded-[28px] sm:rounded-[30px] overflow-hidden bg-transparent relative border border-white/10 shadow-2xl">
+              <img 
+                id="active-screenshot"
+                src="assets/index.png?v=20261114_02" 
+                alt="Riskr App Screen" 
+                class="w-full h-full object-cover block transition-opacity duration-300 select-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Screen Detail Panel -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="p-6 sm:p-8 rounded-3xl bg-[#0E0E18] border border-white/10 shadow-2xl relative overflow-hidden">
+            <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4 text-cyber-cyan" id="screen-icon">
+              <i data-lucide="swords" class="w-6 h-6"></i>
+            </div>
+            
+            <span class="text-xs font-mono font-bold text-cyber-purple uppercase tracking-widest block mb-1" id="screen-subtitle">
+              CORE MULTIPLAYER MATCHMAKING
+            </span>
+            <h3 class="text-2xl sm:text-3xl font-black text-white mb-4" id="screen-title">
+              CYBER ARENA LOBBY
+            </h3>
+            <p class="text-zinc-400 text-sm leading-relaxed mb-6" id="screen-desc">
+              Browse live open duels in real time. Host your own game room with custom stakes (100, 300, 500, or 1000 SKR) or click to accept incoming challenges across Solana.
+            </p>
+
+            <div class="space-y-3 border-t border-white/10 pt-4" id="screen-highlights">
+              <div class="flex items-center gap-3 text-xs font-mono text-zinc-300">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-cyber-green shrink-0"></i>
+                <span>Instant match discovery with low-latency Firestore streaming</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs font-mono text-zinc-300">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-cyber-green shrink-0"></i>
+                <span>Decentralized peer-to-peer matchmaking with Solana smart escrow</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs font-mono text-zinc-300">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-cyber-green shrink-0"></i>
+                <span>Host cancellation & full refund available after 5-minute timeout</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Download Reminder Pill -->
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-cyber-purple/20 via-cyber-cyan/20 to-transparent border border-white/10 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <i data-lucide="shield-check" class="w-6 h-6 text-cyber-cyan shrink-0"></i>
+              <div>
+                <span class="font-bold text-xs text-white block">Official Release v7.0 Signed APK</span>
+                <span class="text-[11px] font-mono text-zinc-400">14.15 MB • SHA-256 Verified • Direct Install</span>
+              </div>
+            </div>
+            <a href="downloads/Riskr_v7.0.apk" download class="px-4 py-2 rounded-xl bg-cyber-cyan text-black font-black text-xs uppercase tracking-wider hover:brightness-110 transition-all">
+              DOWNLOAD
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 4. GAME MODES DEEP DIVE -->
+  <!-- ======================================================== -->
+  <section id="modes" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-mono font-bold text-cyber-purple uppercase tracking-widest block mb-2">
+          WARGAME PROTOCOLS
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+          THREE WAYS TO <span class="gradient-text-cyber">PROVE DOMINANCE</span>
+        </h2>
+        <p class="text-zinc-400 text-sm sm:text-base">
+          Every mode is designed with transparency, verifiable fairness, and instant Solana token mechanics.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Mode 1: Coin Flip -->
+        <div class="rounded-3xl bg-[#0E0E18] border border-white/10 hover:border-cyber-cyan/50 p-6 sm:p-8 transition-all hover:-translate-y-2 group shadow-xl">
+          <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-6 border border-white/10">
+            <img src="assets/hero_coin_banner.jpg" alt="Coin Flip Banner" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0E0E18] via-transparent to-transparent"></div>
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-md text-[10px] font-mono font-black text-cyber-cyan border border-white/10">
+              50 / 50 PROBABILITY
+            </span>
+          </div>
+
+          <h3 class="text-xl font-black text-white mb-2 flex items-center justify-between">
+            SOLANA COIN FLIP
+            <i data-lucide="coins" class="w-5 h-5 text-cyber-cyan"></i>
+          </h3>
+          <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+            The purest PvP test on chain. Pick Heads or Tails, lock in your stake tier, and settle the outcome with on-chain random verification in seconds.
+          </p>
+
+          <div class="space-y-2 text-xs font-mono border-t border-white/10 pt-4 text-zinc-300">
+            <div class="flex justify-between">
+              <span class="text-zinc-500">Stakes:</span>
+              <span class="font-bold text-white">100 / 300 / 500 / 1000 SKR</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-zinc-500">Winner Reward:</span>
+              <span class="font-bold text-cyber-green">1.8x Net Pot</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-zinc-500">Resolution:</span>
+              <span class="font-bold text-cyber-cyan">Immediate RPC Payout</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mode 2: RPS Combat -->
+        <div class="rounded-3xl bg-[#0E0E18] border border-white/10 hover:border-cyber-purple/50 p-6 sm:p-8 transition-all hover:-translate-y-2 group shadow-xl">
+          <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-6 border border-white/10">
+            <img src="assets/hero_rps_banner.jpg" alt="RPS Combat Banner" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0E0E18] via-transparent to-transparent"></div>
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-md text-[10px] font-mono font-black text-cyber-purple border border-white/10">
+              PSYCHOLOGICAL PVP
+            </span>
+          </div>
+
+          <h3 class="text-xl font-black text-white mb-2 flex items-center justify-between">
+            RPS COMBAT
+            <i data-lucide="swords" class="w-5 h-5 text-cyber-purple"></i>
+          </h3>
+          <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+            Rock, Paper, Scissors mind games powered by cryptography. Hidden move submission prevents frontrunning. 100% full refund on tie matches.
+          </p>
+
+          <div class="space-y-2 text-xs font-mono border-t border-white/10 pt-4 text-zinc-300">
+            <div class="flex justify-between">
+              <span class="text-zinc-500">Stakes:</span>
+              <span class="font-bold text-white">100 / 300 / 500 / 1000 SKR</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-zinc-500">Ties / Draws:</span>
+              <span class="font-bold text-cyber-cyan">Full 100% Refund (0 Fee)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-zinc-500">Move Privacy:</span>
+              <span class="font-bold text-cyber-purple">Server-Encrypted State</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mode 3: Incinerator -->
+        <div class="rounded-3xl bg-[#0E0E18] border border-white/10 hover:border-red-500/50 p-6 sm:p-8 transition-all hover:-translate-y-2 group shadow-xl">
+          <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-6 border border-white/10">
+            <img src="assets/incinerator_core.jpg" alt="Incinerator Banner" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0E0E18] via-transparent to-transparent"></div>
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-md text-[10px] font-mono font-black text-red-400 border border-white/10">
+              HYPER-DEFLATIONARY
+            </span>
+          </div>
+
+          <h3 class="text-xl font-black text-white mb-2 flex items-center justify-between">
+            PROTOCOL INCINERATOR
+            <i data-lucide="flame" class="w-5 h-5 text-red-500"></i>
+          </h3>
+          <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+            Execute native Solana burn instructions to wipe $SKR from circulation forever. Climb the prestigious Burn Hall of Glory and reduce token supply.
+          </p>
+
+          <div class="space-y-2 text-xs font-mono border-t border-white/10 pt-4 text-zinc-300">
+            <div class="flex justify-between">
+              <span class="text-zinc-500">Burn Address:</span>
+              <span class="font-bold text-zinc-400">1nc1nerator...1111</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-zinc-500">Circulation Impact:</span>
+              <span class="font-bold text-red-400">Permanent Destruction</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-zinc-500">Leaderboard:</span>
+              <span class="font-bold text-yellow-400">Ranked Burn Trophies</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <!-- ======================================================== -->
+  <!-- 6. DOWNLOAD HUB -->
+  <!-- ======================================================== -->
+  <section id="download" class="py-24 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="p-8 sm:p-12 lg:p-16 rounded-[40px] bg-gradient-to-br from-[#121224] via-[#0A0A14] to-[#07070C] border border-white/15 shadow-[0_0_50px_rgba(0,240,255,0.15)] relative overflow-hidden">
+        
+        <!-- Glowing accents -->
+        <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyber-cyan/20 rounded-full blur-[90px] pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-cyber-purple/20 rounded-full blur-[90px] pointer-events-none"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+          
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyber-cyan/15 border border-cyber-cyan/30 text-xs font-mono font-bold text-cyber-cyan">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              OFFICIAL RELEASE SIGNED APK
+            </div>
+
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+              DOWNLOAD <br />
+              <span class="gradient-text-cyber">RISKR v7.0 FOR ANDROID</span>
+            </h2>
+
+            <p class="text-zinc-400 text-sm sm:text-base leading-relaxed">
+              Experience the full native Android client with high-definition 3D assets, tactile haptic response, and direct Solana Mobile Wallet Adapter connectivity.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-mono text-zinc-300">
+              <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                <span class="text-zinc-500 block text-[10px]">Version:</span>
+                <span class="font-bold text-white">v7.0 (Code 7)</span>
+              </div>
+              <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                <span class="text-zinc-500 block text-[10px]">Package Size:</span>
+                <span class="font-bold text-cyber-green">14.15 MB</span>
+              </div>
+              <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                <span class="text-zinc-500 block text-[10px]">Compatibility:</span>
+                <span class="font-bold text-cyber-cyan">Android 8.0 - 14</span>
+              </div>
+            </div>
+
+            <!-- SHA-256 Checksum -->
+            <div class="p-3 rounded-xl bg-black/60 border border-white/10 flex items-center justify-between text-xs font-mono text-zinc-400">
+              <div class="truncate mr-2">
+                <span class="text-zinc-500">SHA256: </span>
+                <span class="text-zinc-300">3E537DC66100F87ECDA7...41CB8B2</span>
+              </div>
+              <button onclick="copyToClipboard('3E537DC66100F87ECDA76A711F36D33D8BB26489D26699B436743EC0841CB8B2', 'SHA-256 Checksum')" class="text-cyber-cyan hover:underline shrink-0 text-[11px]">
+                Copy Hash
+              </button>
+            </div>
+          </div>
+
+          <!-- Download Action Card -->
+          <div class="lg:col-span-5 flex flex-col gap-4">
+            <a href="downloads/Riskr_v7.0.apk" download class="p-6 rounded-3xl bg-gradient-to-r from-cyber-cyan to-cyber-green text-black font-black text-center shadow-[0_0_30px_rgba(0,255,163,0.4)] hover:brightness-110 transition-all hover:scale-[1.02] active:scale-98 group">
+              <div class="flex items-center justify-center gap-3 mb-1">
+                <i data-lucide="download" class="w-6 h-6 stroke-[2.5]"></i>
+                <span class="text-lg tracking-wider">DIRECT DOWNLOAD APK</span>
+              </div>
+              <span class="text-xs opacity-80 font-mono">Riskr_v7.0.apk • 14.15 MB • Ready to Install</span>
+            </a>
+
+            <a href="https://github.com/victorseeker/Riskr/releases/tag/V7.0" target="_blank" class="p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 text-white font-bold text-xs uppercase tracking-wider text-center transition-all flex items-center justify-center gap-2">
+              <i data-lucide="github" class="w-4 h-4"></i>
+              <span>VIEW GITHUB RELEASE v7.0</span>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 7. FREQUENTLY ASKED QUESTIONS -->
+  <!-- ======================================================== -->
+  <section id="faq" class="py-24 border-t border-white/10 bg-[#0E0E18]/40">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-14">
+        <span class="text-xs font-mono font-bold text-cyber-cyan uppercase tracking-widest block mb-2">
+          HAVE QUESTIONS?
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">
+          FREQUENTLY ASKED <span class="gradient-text-cyber">QUESTIONS</span>
+        </h2>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- FAQ 1 -->
+        <details class="p-6 rounded-2xl bg-white/5 border border-white/10 group cursor-pointer">
+          <summary class="font-black text-base text-white flex justify-between items-center list-none">
+            <span>Is Riskr non-custodial and secure?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-cyber-cyan group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-xs text-zinc-400 mt-4 leading-relaxed font-mono">
+            Yes. Riskr does not store, request, or have access to your wallet private keys or recovery phrases. All matches and fund escrows occur through verified on-chain SPL-Token transfers and automated smart settlements.
+          </p>
+        </details>
+
+        <!-- FAQ 2 -->
+        <details class="p-6 rounded-2xl bg-white/5 border border-white/10 group cursor-pointer">
+          <summary class="font-black text-base text-white flex justify-between items-center list-none">
+            <span>What happens in case of a Draw in RPS Combat?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-cyber-cyan group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-xs text-zinc-400 mt-4 leading-relaxed font-mono">
+            In RPS Combat, if both host and challenger play the same hand (e.g. Rock vs Rock), the duel resolves as DRAW. Both players receive a 100% full refund of their stake directly back to their wallet, with 0% protocol fee charged.
+          </p>
+        </details>
+
+        <!-- FAQ 3 -->
+        <details class="p-6 rounded-2xl bg-white/5 border border-white/10 group cursor-pointer">
+          <summary class="font-black text-base text-white flex justify-between items-center list-none">
+            <span>What wallets are compatible with Riskr?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-cyber-cyan group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-xs text-zinc-400 mt-4 leading-relaxed font-mono">
+            Riskr connects seamlessly with Phantom, Solflare, and the Solana Mobile Saga Seed Vault via the official Solana Mobile Wallet Adapter (MWA). Private keys never leave your secure enclave.
+          </p>
+        </details>
+
+        <!-- FAQ 4 -->
+        <details class="p-6 rounded-2xl bg-white/5 border border-white/10 group cursor-pointer">
+          <summary class="font-black text-base text-white flex justify-between items-center list-none">
+            <span>How does the Token Burn Incinerator work?</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-cyber-cyan group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-xs text-zinc-400 mt-4 leading-relaxed font-mono">
+            The Incinerator sends SPL tokens to Solana's unrecoverable protocol incinerator address (<code class="text-red-400">1nc1nerator...1111</code>) using Opcode 8 Burn instructions. Burned tokens are permanently removed from circulating supply, increasing deflationary pressure.
+          </p>
+        </details>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- 8. FOOTER -->
+  <!-- ======================================================== -->
+  <footer class="border-t border-white/10 py-12 bg-[#050508]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-white/10">
+        <div class="flex items-center gap-3">
+          <img src="assets/cyber_avatar.jpg" alt="Riskr" class="w-8 h-8 rounded-lg object-cover" />
+          <span class="font-black text-lg text-white tracking-wider">RISKR PROTOCOL</span>
+        </div>
+
+        <!-- Links -->
+        <div class="flex flex-wrap items-center gap-6 text-xs text-zinc-400 font-bold">
+          <a href="https://github.com/victorseeker/Riskr" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+          <a href="https://solscan.io/token/SKRbvo6Gf7GondiT3BbTfuRDPqLWei4j2Qy2NPGZhW3" target="_blank" class="hover:text-white transition-colors">Solscan</a>
+          <a href="#download" class="hover:text-white transition-colors">Download APK</a>
+          <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-500 font-mono text-center md:text-left">
+        <p>© 2026 Victor Seeker. All rights reserved. Built on Solana.</p>
+        <p class="text-[11px] max-w-lg">
+          ⚠️ Riskr is a decentralized crypto gaming protocol. Age 18+ only. Not available to users in Cuba (CU), Iran (IR), North Korea (KP), or Sudan (SD).
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- TOAST NOTIFICATION -->
+  <!-- ======================================================== -->
+  <div id="copy-toast" class="fixed bottom-6 right-6 px-4 py-2.5 rounded-xl bg-cyber-green text-black font-black text-xs font-mono shadow-2xl opacity-0 translate-y-3 pointer-events-none z-50 flex items-center gap-2">
+    <i data-lucide="check" class="w-4 h-4 stroke-[3]"></i>
+    <span id="copy-toast-msg">Copied to clipboard!</span>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- INTERACTIVE SCRIPTS -->
+  <!-- ======================================================== -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Screen Data
+    const screens = {
+      index: {
+        src: 'assets/index.png?v=20261114_02',
+        icon: 'swords',
+        subtitle: 'CORE MULTIPLAYER MATCHMAKING',
+        title: 'CYBER ARENA LOBBY',
+        desc: 'Browse live open duels in real time. Host your own game room with custom stakes (100, 300, 500, or 1000 SKR) or click to accept incoming challenges across Solana.',
+        highlights: [
+          'Instant match discovery with low-latency Firestore streaming',
+          'Decentralized peer-to-peer matchmaking with Solana smart escrow',
+          'Host cancellation & full refund available after 5-minute timeout'
+        ]
+      },
+      flip: {
+        src: 'assets/flip.png?v=20261114_02',
+        icon: 'coins',
+        subtitle: '50/50 INSTANT COIN TOSS',
+        title: 'SOLANA COIN FLIP DUEL',
+        desc: 'Choose Heads or Tails against opponents. Instant cryptographic resolution settles the pot immediately into the winner\'s wallet with zero wait time.',
+        highlights: [
+          'Provably fair 50/50 on-chain outcome simulation',
+          'Winner takes 90% of the combined pot (+80% net gain)',
+          'High definition 3D rendered cybernetic coin animations'
+        ]
+      },
+      rps: {
+        src: 'assets/rps.png?v=20261114_02',
+        icon: 'shield-alert',
+        subtitle: 'PSYCHOLOGICAL COMBAT',
+        title: 'ROCK PAPER SCISSORS DUEL',
+        desc: 'Outsmart your rival with classic rock-paper-scissors strategy. Sealed move commitments guarantee no player can cheat or frontrun selections.',
+        highlights: [
+          'Full 100% refund for both players on Draw matches (0% fee)',
+          'Multi-node failover pool prevents network dropouts during play',
+          'Interactive 3D battle badges for rock, paper, and scissors'
+        ]
+      },
+      burn: {
+        src: 'assets/burn.png?v=20261114_02',
+        icon: 'flame',
+        subtitle: 'DEFLATIONARY SUPPLY REDUCTION',
+        title: 'PROTOCOL INCINERATOR CORE',
+        desc: 'Permanently destroy SKR tokens from circulating supply by dispatching SPL burn transactions directly to Solana\'s unrecoverable burn destination.',
+        highlights: [
+          'Pick 10, 50, 100, or 500 SKR incineration batches in 1-tap',
+          'Irreversible on-chain token deflation verifiable on Solscan',
+          'Climb the global Burner rankings in the Hall of Glory'
+        ]
+      },
+      rank: {
+        src: 'assets/rank.png?v=20261114_02',
+        icon: 'trophy',
+        subtitle: 'GLOBAL WARRIOR RANKINGS',
+        title: 'HALL OF CYBER GLORY',
+        desc: 'Compete for the top spot across three specialized categories: RPS Victories, Coin Flip Wins, and Total SKR Burned by player wallet.',
+        highlights: [
+          'Separate ranking tables for distinct gaming disciplines',
+          'Live tracking of cumulative tournament winnings',
+          'Special golden cyber medals for top-ranked contenders'
+        ]
+      },
+      me: {
+        src: 'assets/me.png?v=20261114_02',
+        icon: 'user',
+        subtitle: 'DECENTRALIZED IDENTITY',
+        title: 'CYBER PLAYER PROFILE',
+        desc: 'Manage your connected Solana wallet address, inspect personal match win-rates, customize battle tags, and review platform trust specifications.',
+        highlights: [
+          'Direct Solana wallet connection via Mobile Wallet Adapter',
+          '1-Click Solana wallet public key copying and explorer lookup',
+          'Verified compliance badges and battle telemetry history'
+        ]
+      }
+    };
+
+    function switchScreen(key) {
+      const data = screens[key];
+      if (!data) return;
+
+      // Update screenshot with smooth transition
+      const img = document.getElementById('active-screenshot');
+      img.style.opacity = '0';
+      setTimeout(() => {
+        img.src = data.src;
+        img.style.opacity = '1';
+      }, 150);
+
+      // Update details
+      document.getElementById('screen-subtitle').innerText = data.subtitle;
+      document.getElementById('screen-title').innerText = data.title;
+      document.getElementById('screen-desc').innerText = data.desc;
+
+      // Update icon
+      document.getElementById('screen-icon').innerHTML = `<i data-lucide="${data.icon}" class="w-6 h-6"></i>`;
+      
+      // Update highlights
+      const hlContainer = document.getElementById('screen-highlights');
+      hlContainer.innerHTML = data.highlights.map(h => `
+        <div class="flex items-center gap-3 text-xs font-mono text-zinc-300">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-cyber-green shrink-0"></i>
+          <span>${h}</span>
+        </div>
+      `).join('');
+
+      // Refresh icons in dynamic content
+      lucide.createIcons();
+
+      // Update tab buttons
+      document.querySelectorAll('.screen-tab').forEach(btn => {
+        btn.className = 'screen-tab px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all bg-white/5 text-zinc-400 hover:text-white border border-white/10';
+      });
+      const activeTab = document.getElementById(`tab-${key}`);
+      if (activeTab) {
+        activeTab.className = 'screen-tab px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all bg-cyber-purple text-white shadow-[0_0_15px_rgba(189,0,255,0.4)]';
+      }
+    }
+
+    // 1-Click Copy with Toast
+    function copyToClipboard(text, label) {
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('copy-toast');
+        const toastMsg = document.getElementById('copy-toast-msg');
+        toastMsg.innerText = `${label} copied to clipboard!`;
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(12px)';
+        }, 2200);
+      });
+    }
+  </script>
+
+</body>
+</html>
